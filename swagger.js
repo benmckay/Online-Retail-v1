@@ -1,37 +1,57 @@
-<<<<<<< HEAD
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 
-const options = {
+const swaggerSpec = swaggerJsDoc({
   definition: {
     openapi: "3.0.0",
     info: {
       title: "Online Retail API",
       version: "1.0.0",
-      description: "API documentation for managing customers, products, and orders for Onlin Retail BCS 4103 Project",
+      description: "API documentation for the Online Retail system",
     },
-    servers: [{ url: "http://localhost:5000" }],
+    servers: [
+      {
+        url: "http://localhost:5000",
+      },
+    ],
   },
-  apis: ["./routes/*.js"], // To includes all route files
-};
+  apis: ["./routes/*.js"], // Adjust the path to your route files
+});
 
-const swaggerSpec = swaggerJsDoc(options);
-module.exports = swaggerSpec;
-=======
-const swaggerJsDoc = require("swagger-jsdoc");
+const app = express();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
 
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Online Retail API",
-      version: "1.0.0",
-      description: "API documentation for managing customers, products, and orders",
-    },
-    servers: [{ url: "http://localhost:5000" }],
-  },
-  apis: ["./routes/*.js"], // Ensure this includes all route files
-};
+// API Routes
+app.use("/api/customers", require("./routes/customers"));
+app.use("/api/products", require("./routes/products"));
+app.use("/api/orders", require("./routes/orders"));
+app.use("/api/retailSales", require("./routes/retailSales"));
 
-const swaggerSpec = swaggerJsDoc(options);
-module.exports = swaggerSpec;
->>>>>>> c8a65bcf6f2e8f8b03cb4bf3a0116e806549f3c6
+// Swagger Docs Route
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Default route
+app.get("/", (req, res) => {
+  res.send("Welcome to the Online Retail API!");
+});
+
+// Error handling
+app.use((req, res, next) => {
+  res.status(404).json({ success: false, message: "API endpoint not found" });
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: "Internal Server Error" });
+});
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Swagger Docs available at http://localhost:${PORT}/api/docs`);
+});
