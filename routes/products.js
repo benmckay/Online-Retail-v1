@@ -147,7 +147,6 @@ router.put("/:id", productController.updateProduct);
  *       500:
  *         description: Server error
  */
-// DELETE product by ID
 router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

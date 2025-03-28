@@ -1,0 +1,68 @@
+const express = require('express');
+const { Client } = require('pg');
+const app = express();
+const port = 3000;
+
+const client = new Client({
+    user: 'your_username',
+    host: 'your_host',
+    database: 'your_database',
+    password: 'your_password',
+    port: 5432,
+});
+
+client.connect();
+
+app.use(express.json());
+
+// Get all invoices
+app.get('/invoices', async (req, res) => {
+    const result = await client.query('SELECT * FROM invoices');
+    res.json(result.rows);
+});
+
+// Get a specific invoice by ID
+app.get('/invoices/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await client.query('SELECT * FROM invoices WHERE invoice_no = $1', [id]);
+    res.json(result.rows[0]);
+});
+
+// Add a new invoice
+app.post('/invoices', async (req, res) => {
+    const { invoice_no, invoice_date, customer_id } = req.body;
+    const query = `
+        INSERT INTO invoices (invoice_no, invoice_date, customer_id)
+        VALUES ($1, $2, $3)
+        RETURNING *
+    `;
+    const values = [invoice_no, invoice_date, customer_id];
+    const result = await client.query(query, values);
+    res.json(result.rows[0]);
+});
+
+// Update an existing invoice
+app.put('/invoices/:id', async (req, res) => {
+    const { id } = req.params;
+    const { invoice_date, customer_id } = req.body;
+    const query = `
+        UPDATE invoices
+        SET invoice_date = $1, customer_id = $2
+        WHERE invoice_no = $3
+        RETURNING *
+    `;
+    const values = [invoice_date, customer_id, id];
+    const result = await client.query(query, values);
+    res.json(result.rows[0]);
+});
+
+// Delete an invoice
+app.delete('/invoices/:id', async (req, res) => {
+    const { id } = req.params;
+    await client.query('DELETE FROM invoices WHERE invoice_no = $1', [id]);
+    res.json({ message: 'Invoice deleted successfully' });
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
