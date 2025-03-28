@@ -46,28 +46,20 @@ class orderController {
 
   async createOrder(orderData) {
     try {
-      const { order_id, customer_id, order_date, total_amount } = orderData;
+      const { customer_id, order_date, total_amount } = orderData;
 
       // Validate input
       if (!customer_id || !order_date || !total_amount) {
         throw new Error('customer_id, order_date, and total_amount are required');
       }
 
-      // Check if order already exists
-      const existingOrderQuery = 'SELECT * FROM orders WHERE order_id = $1';
-      const existingOrderResult = await db.query(existingOrderQuery, [order_id]);
-
-      if (existingOrderResult.rows.length > 0) {
-        throw new Error('Duplicate key: Order with this ID already exists');
-      }
-
-      // Insert new order
+      // Insert new order (order_id will be auto-generated)
       const query = `
-        INSERT INTO orders (order_id, customer_id, order_date, total_amount)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO orders (customer_id, order_date, total_amount)
+        VALUES ($1, $2, $3)
         RETURNING *
       `;
-      const result = await db.query(query, [order_id, customer_id, order_date, total_amount]);
+      const result = await db.query(query, [customer_id, order_date, total_amount]);
 
       return result.rows[0];
     } catch (error) {
@@ -91,7 +83,10 @@ class orderController {
         throw new Error('Order not found');
       }
 
-      return result.rows[0];
+      return {
+        message: 'Order updated successfully',
+        order: result.rows[0],
+      };
     } catch (error) {
       throw error;
     }

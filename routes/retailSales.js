@@ -143,4 +143,4 @@ router.put("/:invoice_no", retailSaleController.updateRetailSale);
  */
 router.delete("/:invoice_no", retailSaleController.deleteRetailSale);
 
-module.exports = router;
+module.exports = router; // Export the router directly, similar to the products module

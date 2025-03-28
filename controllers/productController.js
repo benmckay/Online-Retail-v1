@@ -25,14 +25,14 @@ exports.getProductById = async (req, res) => {
 // Create a new product
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, price } = req.body;
+    const { name, description, price, stock } = req.body;
 
     // Validate required fields
-    if (!name || !price) {
-      return res.status(400).json({ error: "Name and price are required" });
+    if (!name || !price || stock === undefined) {
+      return res.status(400).json({ error: "Name, price, and stock are required" });
     }
 
-    const newProduct = await productModel.createProduct(name, description, price);
+    const newProduct = await productModel.createProduct({ name, description, price, stock }); // Pass as an object
 
     // Return success response with the created product details
     res.status(201).json({
@@ -48,14 +48,14 @@ exports.createProduct = async (req, res) => {
 // Update a product
 exports.updateProduct = async (req, res) => {
   try {
-    const { name, description, price } = req.body; // Added description to destructuring
+    const { name, description, price, stock } = req.body;
 
     // Validate required fields
-    if (!name || !price) {
-      return res.status(400).json({ error: "Name and price are required" });
+    if (!name || !price || stock === undefined) {
+      return res.status(400).json({ error: "Name, price, and stock are required" });
     }
 
-    const updatedProduct = await productModel.updateProduct(req.params.id, name, description, price); // Pass description to model
+    const updatedProduct = await productModel.updateProduct(req.params.id, { name, description, price, stock }); // Pass as an object
 
     // Handle case where the product does not exist
     if (!updatedProduct) {
@@ -91,16 +91,13 @@ exports.deleteProduct = async (req, res) => {
 
     const deletedProduct = await productModel.deleteProduct(parseInt(productId)); // Ensure ID is parsed as an integer
 
-    // Handle case where the product does not exist
-    if (!deletedProduct) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
     // Return success response with the deleted product details
     res.status(200).json({ message: "Product deleted successfully", product: deletedProduct });
   } catch (error) {
     console.error("Error deleting product:", error.message);
+    if (error.message === "Product not found") {
+      return res.status(404).json({ error: "Product not found" });
+    }
     res.status(500).json({ error: "An error occurred while deleting the product" });
   }
 };
- 

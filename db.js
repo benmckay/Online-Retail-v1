@@ -1,34 +1,28 @@
-<<<<<<< HEAD
 const { Pool } = require("pg");
-require("dotenv").config();
-
-if (!process.env.DATABASE_URL) {
-  console.error("❌ DATABASE_URL is not defined in the environment variables.");
-  process.exit(1);
-}
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false, // For cloud deployments
+  user: process.env.DB_USER || "postgres",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "Retail",
+  password: process.env.DB_PASSWORD || "Karanja8",
+  port: process.env.DB_PORT || 5432,
 });
-
-pool.connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch(err => console.error(`❌ Database Connection Error: ${err.message}\nStack Trace: ${err.stack}`));
-
-module.exports = pool;
-=======
-const { Pool } = require("pg");
-require("dotenv").config();
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false, // For cloud deployments
+// Test the connection
+pool.connect((err) => {
+  if (err) {
+    console.error("Connection error", err.stack);
+  } else {
+    console.log("Connected to the Postgres Retail database");
+  }
 });
-
-pool.connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch(err => console.error("❌ Database Connection Error:", err.message));
-
+// Export the pool for use in other modules
+// This allows us to use the pool in our models
+// and controllers to interact with the database
+// For example:
+// const pool = require("./db");
+// const result = await pool.query("SELECT * FROM products");
+// console.log(result.rows);
+// This is a simple connection pool for PostgreSQL
+// using the pg library.
+// It allows us to connect to the database and run queries.
 module.exports = pool;
->>>>>>> c8a65bcf6f2e8f8b03cb4bf3a0116e806549f3c6
