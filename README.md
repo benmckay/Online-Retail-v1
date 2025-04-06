@@ -29,7 +29,7 @@ API documentation for the Online Retail system
 
 Servers
 
-http://localhost:5000
+http://localhost:5000/api-docs
 Customers
 API for managing customers
 
