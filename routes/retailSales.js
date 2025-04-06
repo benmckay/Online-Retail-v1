@@ -18,8 +18,33 @@ const retailSaleController = require("../controllers/retailSaleController");
  *     responses:
  *       200:
  *         description: A list of retail sales
- *      404:
- *        description: Retail sales not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   invoice_no:
+ *                     type: string
+ *                   stock_code:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *                   quantity:
+ *                     type: integer
+ *                   invoice_date:
+ *                     type: string
+ *                     format: date
+ *                   unit_price:
+ *                     type: number
+ *                     format: float
+ *                   customer_id:
+ *                     type: integer
+ *                   country:
+ *                     type: string
+ *       404:
+ *         description: Retail sales not found
  */
 router.get("/", retailSaleController.getAllRetailSales);
 
