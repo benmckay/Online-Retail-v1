@@ -30,6 +30,12 @@ app.use(express.json()); // Middleware to parse JSON
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 console.log("Swagger middleware registered at /api-docs");
 
+// Swagger JSON Route
+app.get("/swagger.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
 // API Routes
 app.use("/api/customers", require("./routes/customers"));
 app.use("/api/products", require("./routes/products"));
