@@ -21,122 +21,54 @@ Tools: Postman (API testing), OCI Account (Deployment)
 git clone https://github.com/[benmckay]/advanced-dbs-project.git
 cd advanced-dbs-project
 
+## Prerequisites
+- **Node.js** 18+ and npm
+- **PostgreSQL** 13+
+- Tools: Postman (API testing), OCI Account (Deployment)
 
-Online Retail API
- 1.0.0 
-OAS 3.0
-API documentation for the Online Retail system
+## Installation & Setup
+1. Clone the Repository
+   ```bash
+   git clone https://github.com/benmckay/Online-Retail-v1.git
+   cd Online-Retail-v1
+   ```
 
-Servers
+## API Documentation
+### Base URL
+- `http://localhost:5000/api-docs`
 
-http://localhost:5000/api-docs
-Customers
-API for managing customers
+### Customers
+- **GET** `/api/customers`: Get all customers
+- **POST** `/api/customers`: Create a new customer
+- **GET** `/api/customers/{id}`: Get a customer by ID
+- **PUT** `/api/customers/{id}`: Update a customer by ID
+- **DELETE** `/api/customers/{id}`: Delete a customer by ID
 
+### Orders
+- **GET** `/api/orders`: Retrieve a list of orders
+- **POST** `/api/orders`: Create a new order
+- **GET** `/api/orders/{id}`: Retrieve a specific order by ID
+- **PUT** `/api/orders/{id}`: Update an existing order
+- **DELETE** `/api/orders/{id}`: Delete an order
 
+### Products
+- **GET** `/api/products`: Get all products
+- **POST** `/api/products`: Create a new product
+- **PUT** `/api/products/{id}`: Update a product by ID
+- **DELETE** `/api/products/{id}`: Delete a product by ID
 
-GET
-/api/customers
-Get all customers
+### Retail Sales
+- **GET** `/api/retailsales`: Get all retail sales
+- **POST** `/api/retailsales`: Create a new retail sale
+- **GET** `/api/retailsales/{invoice_no}`: Get a retail sale by invoice_no
+- **PUT** `/api/retailsales/{invoice_no}`: Update a retail sale by invoice_no
+- **DELETE** `/api/retailsales/{invoice_no}`: Delete a retail sale by invoice_no
 
+## Performance Analysis
+The project includes performance analysis using PostgreSQL's EXPLAIN ANALYZE to ensure efficient query execution.
 
-POST
-/api/customers
-Create a new customer
+## Deployment
+The project can be deployed using an OCI account for hosting the application.
 
-
-GET
-/api/customers/{id}
-Get a customer by ID
-
-
-PUT
-/api/customers/{id}
-Update a customer by ID
-
-
-DELETE
-/api/customers/{id}
-Delete a customer by ID
-
-Orders
-Order management API
-
-
-
-GET
-/api/orders
-Retrieve a list of orders
-
-
-POST
-/api/orders
-Create a new order
-
-
-GET
-/api/orders/{id}
-Retrieve a specific order by ID
-
-
-PUT
-/api/orders/{id}
-Update an existing order
-
-
-DELETE
-/api/orders/{id}
-Delete an order
-
-Products
-API for managing products
-
-
-
-GET
-/api/products
-Get all products
-
-
-POST
-/api/products
-Create a new product
-
-
-PUT
-/api/products/{id}
-Update a product by ID
-
-
-DELETE
-/api/products/{id}
-Delete a product by ID
-
-RetailSales
-API for managing retail sales
-
-
-
-GET
-/api/retailsales
-Get all retail sales
-
-
-POST
-/api/retailsales
-Create a new retail sale
-
-
-GET
-/api/retailsales/{invoice_no}
-Get a retail sale by invoice_no
-
-
-PUT
-/api/retailsales/{invoice_no}
-Update a retail sale by invoice_no
-
-
-DELETE
-/api/retailsales/{invoice_no}
-Delete a retail sale by invoice_no
+## Conclusion
+This project demonstrates an optimized approach to handling an online retail dataset using PostgreSQL and Node.js, providing a robust API with detailed documentation and performance enhancements.
